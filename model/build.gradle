@@ -4,6 +4,9 @@ apply plugin: 'idea'
 
 repositories {
 	mavenCentral()
+    maven {
+        url "https://repository.jboss.org/nexus/content/repositories/releases"
+    }
 }
 
 configurations {
@@ -16,7 +19,9 @@ configurations {
 }
 
 dependencies {
-	unit("junit:junit:${junitVersion}")
+    unit unitTestDependencies
+    integration integrationDependencies
+	//unit("junit:junit:${junitVersion}")
 	compile("org.jboss.spec:jboss-javaee-6.0:${jbossJavaEEVersion}")
 }
 
@@ -62,33 +67,22 @@ sourceSets {
         resources {
             srcDir 'src/test/unit/resources'
         }
-//        compileClasspath += sourceSets.main.output + configurations.unit
-//        runtimeClasspath += sourceSets.main.output + configurations.unit
     }
 }
 
 
 task integrationTest(type:Test, dependsOn: jar) {
     testClassesDir = sourceSets.integration.output.classesDir
-    classpath =  sourceSets.common.runtimeClasspath
+
+    decorateClasspath(sourceSets.integration, sourceSets, configurations.integration)
+    classpath =  sourceSets.integration.runtimeClasspath
+
     systemProperties['jar.path'] = jar.archivePath
 }
 task unitTest(type:Test, dependsOn: jar) {
     testClassesDir = sourceSets.unit.output.classesDir
-    decorateClasspath(sourceSets.unit, configurations.unit)
+    decorateClasspath(sourceSets.unit, sourceSets, configurations.unit)
     classpath =  sourceSets.unit.runtimeClasspath
 }
-
-def decorateClasspath(self, Object... configurations){
-    self.compileClasspath += sourceSets.main.output
-    self.runtimeClasspath += sourceSets.main.output
-
-    configurations.each { configuration ->
-        self.compileClasspath += sourceSets.main.output + configuration
-        self.runtimeClasspath += sourceSets.main.output + configuration
-    }
-
-
-}
-
-check.dependsOn unitTest
+integrationTest.dependsOn unitTest
+check.dependsOn integrationTest

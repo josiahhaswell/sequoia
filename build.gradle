@@ -1,1 +1,14 @@
 apply plugin: 'java'
+apply plugin: 'idea'
+apply from: 'project/utilities.gradle'
+apply from: 'project/unitDependencies.gradle'
+apply from: 'project/integrationDependencies.gradle'
+
+allprojects {
+    repositories {
+        maven {
+            url "https://repository.jboss.org/nexus/content/repositories/"
+        }
+    }
+}
+

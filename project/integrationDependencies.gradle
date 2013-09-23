@@ -1,0 +1,35 @@
+ext {
+    integrationDependencies = []
+    arquillianDependencies =
+        dependencySet(
+            "org.jboss.arquillian.junit",
+            arquillianVersion,
+            "arquillian-junit-container"
+        )
+    integrationDependencies += arquillianDependencies + unitTestDependencies
+
+    integrationDependencies += [
+            "org.wildfly:wildfly-arquillian-container-managed:8.0.0.Alpha4"
+    ]
+
+
+
+
+}
+/*
+"arquillian-core-api",
+"arquillian-core-spi",
+"arquillian-core-impl-base",
+"arquillian-config-api",
+"arquillian-config-spi",
+"arquillian-config-impl-base",
+"arquillian-test-api",
+"arquillian-test-spi",
+"arquillian-test-impl-base",
+"arquillian-container-spi",
+"arquillian-container-impl-base",
+"arquillian-container-test-api",
+"arquillian-container-test-spi",
+"arquillian-container-test-impl-base",
+"arquillian-junit-core",
+*/

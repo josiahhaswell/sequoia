@@ -1,0 +1,25 @@
+
+ext {
+    printThing = {thing ->
+        println(thing)
+
+    }
+
+    dependencySet = {groupId, version, String[] artifacts ->
+        artifacts.collect { artifact ->
+            "$groupId:$artifact:$version"
+        }
+
+    }
+
+    decorateClasspath = {sourceSet, sourceSets, Object[] configurations ->
+        sourceSet.compileClasspath += sourceSets.main.output
+        sourceSet.compileClasspath += sourceSets.common.output
+        sourceSet.runtimeClasspath += sourceSets.main.output
+        sourceSet.runtimeClasspath += sourceSets.common.output
+        configurations.each { configuration ->
+            sourceSet.compileClasspath += sourceSets.main.output + configuration
+            sourceSet.runtimeClasspath += sourceSets.main.output + configuration
+        }
+    }
+}

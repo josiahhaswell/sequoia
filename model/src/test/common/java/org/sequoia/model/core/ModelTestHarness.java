@@ -7,5 +7,5 @@ package org.sequoia.model.core;
  * Time: 11:53 AM
  * To change this template use File | Settings | File Templates.
  */
-public class ModelTestHarness {
+public abstract class ModelTestHarness {
 }

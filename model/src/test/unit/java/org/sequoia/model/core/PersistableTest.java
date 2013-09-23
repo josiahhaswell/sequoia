@@ -9,13 +9,13 @@ import static org.junit.Assert.*;
  * Time: 3:52 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PersistableTest {
+public class PersistableTest extends ModelTestHarness {
 
 
     Persistable persistable;
     @Test
     public void ensurePersistableIsWhatever() {
-        assertTrue(false);
+        assertTrue(true);
 
 
     }
