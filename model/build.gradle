@@ -1,6 +1,6 @@
 apply plugin: 'java'
-
 apply plugin: 'idea'
+apply plugin: 'jacoco'
 
 repositories {
 	mavenCentral()
@@ -23,6 +23,7 @@ dependencies {
     integration integrationDependencies
 	//unit("junit:junit:${junitVersion}")
 	compile("org.jboss.spec:jboss-javaee-6.0:${jbossJavaEEVersion}")
+    integration("org.hibernate:hibernate-entitymanager:4.2.5.Final")
 }
 
 
@@ -70,6 +71,14 @@ sourceSets {
     }
 }
 
+idea {
+    module {
+        scopes.PROVIDED.plus += configurations.integration
+        testOutputDir = sourceSets.unit.output.classesDir
+    }
+
+
+}
 
 task integrationTest(type:Test, dependsOn: jar) {
     testClassesDir = sourceSets.integration.output.classesDir
@@ -84,5 +93,10 @@ task unitTest(type:Test, dependsOn: jar) {
     decorateClasspath(sourceSets.unit, sourceSets, configurations.unit)
     classpath =  sourceSets.unit.runtimeClasspath
 }
+task copyLibs(type:Copy) {
+    from configurations.integration
+    into "${buildDir}/output/lib"
+}
+test.dependsOn unitTest
 integrationTest.dependsOn unitTest
-check.dependsOn integrationTest
+test.dependsOn integrationTest

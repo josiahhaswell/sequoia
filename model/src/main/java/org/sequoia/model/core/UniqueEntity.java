@@ -1,11 +1,16 @@
 package org.sequoia.model.core;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josiahhaswell
- * Date: 9/23/13
- * Time: 2:59 PM
- * To change this template use File | Settings | File Templates.
- */
-public class UniqueEntity {
+import javax.persistence.MappedSuperclass;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.UUID;
+
+
+@XmlRootElement
+@MappedSuperclass
+public class UniqueEntity extends PersistentEntity<UUID> implements UniquelyIdentifiable{
+
+    public UniqueEntity() {
+        super(UUID.randomUUID());
+    }
+
 }

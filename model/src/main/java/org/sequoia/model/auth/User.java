@@ -1,11 +1,24 @@
 package org.sequoia.model.auth;
 
-/**
- * Created with IntelliJ IDEA.
- * User: josiahhaswell
- * Date: 9/23/13
- * Time: 3:02 PM
- * To change this template use File | Settings | File Templates.
- */
-public class User {
+import org.sequoia.model.core.UniqueEntity;
+
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@Entity
+@Table(
+    name = "SEQUOIA_USER"
+)
+@XmlRootElement
+public class User extends UniqueEntity {
+
+    @XmlAttribute
+    private String name;
+
+    private String password;
+
 }
