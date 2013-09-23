@@ -1,0 +1,6 @@
+<persistence>
+    <persistence-unit name="myapp">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <jta-data-source>java:/ExampleDS</jta-data-source>
+    </persistence-unit>
+</persistence>
