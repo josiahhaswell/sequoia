@@ -1,0 +1,94 @@
+apply plugin: 'java'
+
+apply plugin: 'idea'
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+    unit {
+        description =  'unit-test'
+        transitive = true
+    }
+    integration
+    common
+}
+
+dependencies {
+	unit("junit:junit:${junitVersion}")
+	compile("org.jboss.spec:jboss-javaee-6.0:${jbossJavaEEVersion}")
+}
+
+
+
+
+
+
+
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+
+    }
+    integration {
+        java {
+            srcDir 'src/test/integration/java'
+        }
+        resources {
+            srcDir 'src/test/integration/resources'
+        }
+    }
+
+    common {
+        java {
+            srcDir 'src/test/common/java'
+        }
+        resources {
+            srcDir 'src/test/common/resources'
+        }
+    }
+
+    unit {
+        java {
+            srcDir 'src/test/unit/java'
+        }
+        resources {
+            srcDir 'src/test/unit/resources'
+        }
+//        compileClasspath += sourceSets.main.output + configurations.unit
+//        runtimeClasspath += sourceSets.main.output + configurations.unit
+    }
+}
+
+
+task integrationTest(type:Test, dependsOn: jar) {
+    testClassesDir = sourceSets.integration.output.classesDir
+    classpath =  sourceSets.common.runtimeClasspath
+    systemProperties['jar.path'] = jar.archivePath
+}
+task unitTest(type:Test, dependsOn: jar) {
+    testClassesDir = sourceSets.unit.output.classesDir
+    decorateClasspath(sourceSets.unit, configurations.unit)
+    classpath =  sourceSets.unit.runtimeClasspath
+}
+
+def decorateClasspath(self, Object... configurations){
+    self.compileClasspath += sourceSets.main.output
+    self.runtimeClasspath += sourceSets.main.output
+
+    configurations.each { configuration ->
+        self.compileClasspath += sourceSets.main.output + configuration
+        self.runtimeClasspath += sourceSets.main.output + configuration
+    }
+
+
+}
+
+check.dependsOn unitTest
